@@ -8,18 +8,6 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 
 const vertices = generateGrid(1, 10);
 const indices = generateIndices(10);
-const colors = [];
-
-for (let i = 0; i < vertices.length / 3; i++) {
-    colors.push(Math.random(), Math.random(), Math.random(), 1.0);
-}
-const colorLoc = gl.getAttribLocation(program, "aColor");
-gl.vertexAttribPointer(colorLoc, 4, gl.FLOAT, false, 0, 0);
-gl.enableVertexAttribArray(colorLoc);
-
-const cbo = gl.createBuffer();
-gl.bindBuffer(gl.ARRAY_BUFFER, cbo);
-gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
 
 // Vertex buffer
 const vbo = gl.createBuffer();
