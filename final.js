@@ -36,7 +36,7 @@ const positionLoc = gl.getAttribLocation(program, "aPosition");
 gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
 gl.enableVertexAttribArray(positionLoc);
 
-gl.drawElements(gl.TRIANGLES, indices.length, gl.UNSIGNED_SHORT, 0);
+gl.drawElements(gl.LINES, indices.length, gl.UNSIGNED_SHORT, 0);
 
 function generateGrid(size, divisions) {
     const vertices = [];
