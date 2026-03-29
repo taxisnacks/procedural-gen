@@ -2,13 +2,19 @@ const modelLoc = gl.getUniformLocation(program, "uModel");
 const viewLoc  = gl.getUniformLocation(program, "uView");
 const projLoc  = gl.getUniformLocation(program, "uProj");
 
-let cameraPos = vec3(0.0, 0.0, 1.5);
-let yaw = -90.0, pitch = 0.0;
+let cameraPos = vec3(0.0, 1.2, 2.2);
+let yaw = -90.0, pitch = -25.0;
 let keys = {};
 
 window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
 window.addEventListener("keyup",   e => keys[e.key.toLowerCase()] = false);
-
+canvas.addEventListener('mousemove', (e) => {
+    if (document.pointerLockElement === canvas) {
+        yaw += e.movementX * sensitivity;
+        pitch -= e.movementY * sensitivity;
+        pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, pitch));
+    }
+});
 let last = 0;
 function render(ms) {
   const t = ms * 0.001;

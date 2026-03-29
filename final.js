@@ -34,8 +34,8 @@ function generateGrid(size, divisions) {
     for (let i = 0; i <= divisions; i++) {
         for (let j = 0; j <= divisions; j++) {
             const x = -size/2 + j * step;
-            const y = -size/2 + i * step;
-            vertices.push(x, y, 0);
+            const z = -size/2 + i * step;
+            vertices.push(x, 0, z);
         }
     }
 
