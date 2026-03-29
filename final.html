@@ -8,7 +8,20 @@
     <script src="Common/MV.js"></script>
 
 </head>
+<script id="vertex-shader" type="x-shader/x-vertex">
+attribute vec3 aPosition;
 
+void main() {
+    gl_Position = vec4(aPosition, 1.0);
+}
+</script>
+<script id="fragment-shader" type="x-shader/x-fragment">
+precision mediump float;
+
+void main() {
+    gl_FragColor = vec4(0.3, 0.8, 0.3, 1.0);
+}
+</script>
 <body>
     <canvas id="gl-canvas" width="512" height="512"></canvas>
 
