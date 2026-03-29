@@ -10,9 +10,12 @@
 </head>
 <script id="vertex-shader" type="x-shader/x-vertex">
 attribute vec3 aPosition;
+uniform mat4 uModel;
+uniform mat4 uView;
+uniform mat4 uProj;
 
 void main() {
-    gl_Position = vec4(aPosition, 1.0);
+    gl_Position = uProj * uView * uModel * vec4(aPosition, 1.0);
 }
 </script>
 <script id="fragment-shader" type="x-shader/x-fragment">
@@ -26,5 +29,7 @@ void main() {
     <canvas id="gl-canvas" width="512" height="512"></canvas>
 
     <script src="final.js"></script>
+    <script src="cam.js"></script>
+
 </body>
 </html>
