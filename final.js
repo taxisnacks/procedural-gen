@@ -44,19 +44,23 @@ function generateGrid(size, divisions) {
 
 function generateIndices(divisions) {
     const indices = [];
+    const stride = divisions + 1;
 
-    for (let i = 0; i < divisions; i++) {
+    // Horizontal segments
+    for (let i = 0; i <= divisions; i++) {
         for (let j = 0; j < divisions; j++) {
-            let row1 = i * (divisions + 1);
-            let row2 = (i + 1) * (divisions + 1);
+            const a = i * stride + j;
+            const b = a + 1;
+            indices.push(a, b);
+        }
+    }
 
-            indices.push(row1 + j);
-            indices.push(row2 + j);
-            indices.push(row1 + j + 1);
-
-            indices.push(row1 + j + 1);
-            indices.push(row2 + j);
-            indices.push(row2 + j + 1);
+    // Vertical segments
+    for (let j = 0; j <= divisions; j++) {
+        for (let i = 0; i < divisions; i++) {
+            const a = i * stride + j;
+            const b = a + stride;
+            indices.push(a, b);
         }
     }
 
