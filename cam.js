@@ -5,16 +5,22 @@ const projLoc  = gl.getUniformLocation(program, "uProj");
 let cameraPos = vec3(0.0, 1.2, 2.2);
 let yaw = -90.0, pitch = -25.0;
 let keys = {};
+const sensitivity = 0.12; // degrees per pixel
 
 window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
 window.addEventListener("keyup",   e => keys[e.key.toLowerCase()] = false);
-canvas.addEventListener('mousemove', (e) => {
-    if (document.pointerLockElement === canvas) {
-        yaw += e.movementX * sensitivity;
-        pitch -= e.movementY * sensitivity;
-        pitch = Math.max(-Math.PI/2, Math.min(Math.PI/2, pitch));
-    }
+canvas.addEventListener("click", () => canvas.requestPointerLock());
+
+canvas.addEventListener("mousemove", (e) => {
+  if (document.pointerLockElement !== canvas) return;
+
+  yaw   += e.movementX * sensitivity;
+  pitch -= e.movementY * sensitivity;
+
+  // Clamp to avoid flip
+  pitch = Math.max(-89.0, Math.min(89.0, pitch));
 });
+
 let last = 0;
 function render(ms) {
   const t = ms * 0.001;
