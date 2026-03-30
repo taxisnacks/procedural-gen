@@ -19,20 +19,18 @@ const ebo = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
-// Attribute setup
+// Attributez
 const positionLoc = gl.getAttribLocation(program, "aPosition");
 gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
 gl.enableVertexAttribArray(positionLoc);
-
-gl.drawElements(gl.LINES, indices.length, gl.UNSIGNED_SHORT, 0);
 
 function generateGrid(size, divisions) {
     const vertices = [];
 
     const step = size / divisions;
 
-    for (let i = 0; i <= divisions; i++) {
-        for (let j = 0; j <= divisions; j++) {
+    for (var i = 0; i <= divisions; i++) {
+        for (var j = 0; j <= divisions; j++) {
             const x = -size/2 + j * step;
             const z = -size/2 + i * step;
             vertices.push(x, 0, z);
@@ -46,18 +44,18 @@ function generateIndices(divisions) {
     const indices = [];
     const stride = divisions + 1;
 
-    // Horizontal segments
-    for (let i = 0; i <= divisions; i++) {
-        for (let j = 0; j < divisions; j++) {
+    // Horizontals
+    for (var i = 0; i <= divisions; i++) {
+        for (var j = 0; j < divisions; j++) {
             const a = i * stride + j;
             const b = a + 1;
             indices.push(a, b);
         }
     }
 
-    // Vertical segments
-    for (let j = 0; j <= divisions; j++) {
-        for (let i = 0; i < divisions; i++) {
+    // Verticals
+    for (var j = 0; j <= divisions; j++) {
+        for (var i = 0; i < divisions; i++) {
             const a = i * stride + j;
             const b = a + stride;
             indices.push(a, b);
