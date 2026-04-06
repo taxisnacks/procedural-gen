@@ -7,6 +7,8 @@ var yaw = -90.0, pitch = -25.0;
 var keys = {};
 const sensitivity = 0.12; 
 var speed; // todo: implement a shift to increase cam speed button
+var hasEdit = false; // flag for changing mesh in realtime
+
 
 // WASD camera movement
 window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
@@ -45,10 +47,11 @@ function render(ms) { // make camera movement independent of framerate
   if (keys["s"]) cameraPos = subtract(cameraPos, scale(speed, front));
   if (keys["a"]) cameraPos = subtract(cameraPos, scale(speed, right));
   if (keys["d"]) cameraPos = add(cameraPos, scale(speed, right));
-  if (keys["["]) terrain.amp = Math.max(0.0, terrain.amp - 0.2 * dt);
-  if (keys["]"]) terrain.amp = Math.min(1.0, terrain.amp + 0.2 * dt);
-  if (keys["-"]) terrain.freq = Math.max(0.1, terrain.freq - 2.0 * dt);
-  if (keys["="]) terrain.freq = Math.min(40.0, terrain.freq + 2.0 * dt);
+  if (keys["["]) {terrain.amp = Math.max(0.0, terrain.amp - 0.2 * dt); hasEdit = true;}
+  if (keys["]"]) {terrain.amp = Math.min(1.0, terrain.amp + 0.2 * dt); hasEdit = true;}
+  if (keys["-"]) {terrain.freq = Math.max(0.1, terrain.freq - 2.0 * dt); hasEdit = true;}
+  if (keys["="]) {terrain.freq = Math.min(40.0, terrain.freq + 2.0 * dt); hasEdit = true;}
+  if (hasEdit) rebuildTerrain();
 
   const model = mat4();
   const view  = lookAt(cameraPos, add(cameraPos, front), vec3(0,1,0));
