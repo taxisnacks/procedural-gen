@@ -39,10 +39,16 @@ function render(ms) { // make camera movement independent of framerate
 
   var right = normalize(cross(front, vec3(0,1,0)));
   const speed = 1.5 * dt;
+
+// keybinds for movement and realtime edits
   if (keys["w"]) cameraPos = add(cameraPos, scale(speed, front));
   if (keys["s"]) cameraPos = subtract(cameraPos, scale(speed, front));
   if (keys["a"]) cameraPos = subtract(cameraPos, scale(speed, right));
   if (keys["d"]) cameraPos = add(cameraPos, scale(speed, right));
+  if (keys["["]) terrain.amp = Math.max(0.0, terrain.amp - 0.2 * dt);
+  if (keys["]"]) terrain.amp = Math.min(1.0, terrain.amp + 0.2 * dt);
+  if (keys["-"]) terrain.freq = Math.max(0.1, terrain.freq - 2.0 * dt);
+  if (keys["="]) terrain.freq = Math.min(40.0, terrain.freq + 2.0 * dt);
 
   const model = mat4();
   const view  = lookAt(cameraPos, add(cameraPos, front), vec3(0,1,0));
