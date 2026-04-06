@@ -6,27 +6,27 @@ var cameraPos = vec3(0.0, 1.2, 2.2);
 var yaw = -90.0, pitch = -25.0;
 var keys = {};
 const sensitivity = 0.12; 
-var speed; // Todo: implement a shift to increase cam speed button
+var speed; // todo: implement a shift to increase cam speed button
 
-// WASD Camera movement
+// WASD camera movement
 window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
 window.addEventListener("keyup",   e => keys[e.key.toLowerCase()] = false);
 canvas.addEventListener("click", () => canvas.requestPointerLock());
 
-// Mouse camera panning
+// mouse camera panning
 canvas.addEventListener("mousemove", (e) => {
   if (document.pointerLockElement !== canvas) return;
 
   yaw   += e.movementX * sensitivity;
   pitch -= e.movementY * sensitivity;
 
-  // Prevents weird flipping
+// prevents weird flipping
   pitch = Math.max(-89.0, Math.min(89.0, pitch));
 });
 
 var last = 0;
-function render(ms) {
-  const t = ms * 0.001;
+function render(ms) { // make camera movement independent of framerate
+  const t = ms * 0.001; 
   const dt = t - last;
   last = t;
 

@@ -9,22 +9,22 @@ gl.clear(gl.COLOR_BUFFER_BIT);
 const vertices = generateGrid(1, 10);
 const indices = generateIndices(10);
 
-// Vertex buffer
+// vertex buffer
 const vbo = gl.createBuffer();
 gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
 gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
 
-// Index buffer
+// index buffer
 const ebo = gl.createBuffer();
 gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ebo);
 gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, indices, gl.STATIC_DRAW);
 
-// Attributez
+// attributes
 const positionLoc = gl.getAttribLocation(program, "aPosition");
 gl.vertexAttribPointer(positionLoc, 3, gl.FLOAT, false, 0, 0);
 gl.enableVertexAttribArray(positionLoc);
 
-function generateGrid(size, divisions) {
+function generateGrid(size, divisions) { // generateGrid builds lattice structure of coords
     const vertices = [];
 
     const step = size / divisions;
@@ -40,11 +40,11 @@ function generateGrid(size, divisions) {
     return new Float32Array(vertices);
 }
 
-function generateIndices(divisions) {
+function generateIndices(divisions) { // generateIndices creates line-segments for lattice grid
     const indices = [];
     const stride = divisions + 1;
 
-    // Horizontals
+    // horizontal gridlines
     for (var i = 0; i <= divisions; i++) {
         for (var j = 0; j < divisions; j++) {
             const a = i * stride + j;
@@ -53,7 +53,7 @@ function generateIndices(divisions) {
         }
     }
 
-    // Verticals
+    // verticals
     for (var j = 0; j <= divisions; j++) {
         for (var i = 0; i < divisions; i++) {
             const a = i * stride + j;
