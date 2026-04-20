@@ -62,6 +62,12 @@ function render(ms) { // make camera movement independent of framerate
   gl.uniformMatrix4fv(viewLoc,  false, flatten(view));
   gl.uniformMatrix4fv(projLoc,  false, flatten(proj));
   gl.drawElements(gl.LINES, indices.length, gl.UNSIGNED_SHORT, 0);
+    
+  fpsAccum += dt; fpsFrames++;
+if (fpsAccum >= 0.25) { // update 4x/sec
+  fps = fpsFrames / fpsAccum;
+  fpsAccum = 0; fpsFrames = 0;
+}
 
   requestAnimationFrame(render);
 }
