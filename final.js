@@ -1,7 +1,8 @@
 const canvas = document.getElementById("gl-canvas");
 const gl = canvas.getContext("webgl");
 const program = initShaders(gl, "vertex-shader", "fragment-shader");
-
+const GRID_SIZE = 1;
+const GRID_DIVS = 10;
 const terrain = {
   amp: 0.12,      // vertical scale
   freq: 6.0,      // frequency in world units
@@ -21,7 +22,7 @@ gl.useProgram(program);gl.viewport(0,0, canvas.width, canvas.height);
 gl.clearColor(0.1, 0.1, 0.1, 1.0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 
-const vertices = generateGrid(1, 10);
+const vertices = generateGrid(GRID_SIZE, GRID_DIVS);
 const indices = generateIndices(10);
 
 // vertex buffer
@@ -82,8 +83,9 @@ function generateIndices(divisions) { // generateIndices creates line-segments f
 }
 
 function rebuildTerrain() {
-  const updated = generateGrid(1, 10); // keep same size/divisions for now
+  const updated = generateGrid(GRID_SIZE, GRID_DIVS); // keep same size/divisions for now
   gl.bindBuffer(gl.ARRAY_BUFFER, vbo);
   gl.bufferData(gl.ARRAY_BUFFER, updated, gl.STATIC_DRAW);
+  hasEdit = false;
 }
 
