@@ -35,7 +35,7 @@ function generateGrid(size, divisions) { // generateGrid builds lattice structur
         for (var j = 0; j <= divisions; j++) {
             const x = -size/2 + j * step;
             const z = -size/2 + i * step;
-            const y = heightFn(x, z);
+            const y = heightFn(x, z, size);
             vertices.push(x, y, z);
         }
     }
