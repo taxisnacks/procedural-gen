@@ -11,8 +11,8 @@ var hasEdit = false; // flag for changing mesh in realtime
 
 
 // WASD camera movement
-window.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
-window.addEventListener("keyup",   e => keys[e.key.toLowerCase()] = false);
+window.addEventListener("keydown", (e) => { keys[e.code] = true; });
+window.addEventListener("keyup",   (e) => { keys[e.code] = false; });
 canvas.addEventListener("click", () => canvas.requestPointerLock());
 
 // mouse camera panning
@@ -27,8 +27,10 @@ canvas.addEventListener("mousemove", (e) => {
 });
 
 var last = 0;
-function render(ms) { // make camera movement independent of framerate
-  const t = ms * 0.001; 
+let fpsAccum = 0, fpsFrames = 0, fps = 0;
+
+function render(ms) {
+  const t = ms * 0.001;
   const dt = t - last;
   last = t;
 
@@ -38,19 +40,21 @@ function render(ms) { // make camera movement independent of framerate
     Math.sin(pr),
     Math.sin(yr) * Math.cos(pr)
   ));
-
   var right = normalize(cross(front, vec3(0,1,0)));
-  const speed = 1.5 * dt;
 
-// keybinds for movement and realtime edits
-  if (keys["w"]) cameraPos = add(cameraPos, scale(speed, front));
-  if (keys["s"]) cameraPos = subtract(cameraPos, scale(speed, front));
-  if (keys["a"]) cameraPos = subtract(cameraPos, scale(speed, right));
-  if (keys["d"]) cameraPos = add(cameraPos, scale(speed, right));
-  if (keys["["]) {terrain.amp = Math.max(0.0, terrain.amp - 0.2 * dt); hasEdit = true;}
-  if (keys["]"]) {terrain.amp = Math.min(1.0, terrain.amp + 0.2 * dt); hasEdit = true;}
-  if (keys["-"]) {terrain.freq = Math.max(0.1, terrain.freq - 2.0 * dt); hasEdit = true;}
-  if (keys["="]) {terrain.freq = Math.min(40.0, terrain.freq + 2.0 * dt); hasEdit = true;}
+  const moveSpeed = 1.5 * dt;
+
+  // movement
+  if (keys["KeyW"]) cameraPos = add(cameraPos, scale(moveSpeed, front));
+  if (keys["KeyS"]) cameraPos = subtract(cameraPos, scale(moveSpeed, front));
+  if (keys["KeyA"]) cameraPos = subtract(cameraPos, scale(moveSpeed, right));
+  if (keys["KeyD"]) cameraPos = add(cameraPos, scale(moveSpeed, right));
+
+  // terrain edits
+  if (keys["BracketLeft"])  { terrain.amp  = Math.max(0.0, terrain.amp - 0.2 * dt); hasEdit = true; }
+  if (keys["BracketRight"]) { terrain.amp  = Math.min(1.0, terrain.amp + 0.2 * dt); hasEdit = true; }
+  if (keys["Minus"])        { terrain.freq = Math.max(0.1, terrain.freq - 2.0 * dt); hasEdit = true; }
+  if (keys["Equal"])        { terrain.freq = Math.min(40.0, terrain.freq + 2.0 * dt); hasEdit = true; }
   if (hasEdit) rebuildTerrain();
 
   const model = mat4();
@@ -59,15 +63,16 @@ function render(ms) { // make camera movement independent of framerate
 
   gl.clear(gl.COLOR_BUFFER_BIT);
   gl.uniformMatrix4fv(modelLoc, false, flatten(model));
-  gl.uniformMatrix4fv(viewLoc,  false, flatten(view));
-  gl.uniformMatrix4fv(projLoc,  false, flatten(proj));
+  gl.uniformMatrix4fv(viewLoc, false, flatten(view));
+  gl.uniformMatrix4fv(projLoc, false, flatten(proj));
   gl.drawElements(gl.LINES, indices.length, gl.UNSIGNED_SHORT, 0);
-    
+
   fpsAccum += dt; fpsFrames++;
-if (fpsAccum >= 0.25) { // update 4x/sec
-  fps = fpsFrames / fpsAccum;
-  fpsAccum = 0; fpsFrames = 0;
-}
+  if (fpsAccum >= 0.25) {
+    fps = fpsFrames / fpsAccum;
+    fpsAccum = 0; fpsFrames = 0;
+    // optional: console.log("fps", fps.toFixed(1));
+  }
 
   requestAnimationFrame(render);
 }
